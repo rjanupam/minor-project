@@ -1,11 +1,6 @@
 import { useState } from 'react';
-import fs from 'fs';
-import path from 'path';
-// import { fileURLToPath } from '/home/catisgoal/Documents/MinorrProoo/final/';
-import { fileURLToPath } from 'url';
-import { Await, useSubmit } from 'react-router-dom';
 
-async function ImageUploadPage() {
+function ImageUploadPage() {
   const [file, setFile] = useState(null);
 
   const handleDragOver = (e) => {
@@ -21,37 +16,6 @@ async function ImageUploadPage() {
     setFile(e.target.files[0]);
   };
 
-  
-// Get the current directory name
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Specify the URL of the Gradio server
-const gradioServerUrl = "http://0.0.0.0:7860/predict";
-
-// Specify the path to your local image file
-const imagePath = path.join(__dirname, 'large_cell_carcinoma_of_the_lung.jpg');
-
-// Read the image file
-const exampleImage = fs.readFileSync(imagePath);
-
-// Create the form data to send to the server
-const formData = new FormData();
-formData.append('image', new Blob([exampleImage]), 'large_cell_carcinoma_of_the_lung.jpg');
-
-// Send the image to the Gradio server
-const response = await fetch(gradioServerUrl, {
-  method: 'POST',
-  body: formData,
-});
-
-if (!response.ok) {
-  console.error('Failed to fetch prediction:', response.statusText);
-} else {
-  const result = awaish
-  t response.json();
-  console.log(result.data);
-}
   return (
     <div className="pt-16">
       <h1 className="text-3xl font-bold text-center mt-10">Image Upload</h1>
@@ -72,7 +36,6 @@ if (!response.ok) {
       hover:file:bg-green-100" type="file" onChange={handleChange} />
       </div>
       {file && <p className="text-center mt-4">Uploaded File: {file.name}</p>}
-      <button onClick={(target.files)=>console.log(target.files)>Submit</button> 
       {/* <button type="button" class="bg-indigo-500 ..." disabled>
         <svg class="motion-reduce:hidden animate-spin ..." viewBox="0 0 24 24"></svg>
         Processing...
