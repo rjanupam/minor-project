@@ -105,9 +105,6 @@ export default function MenuBar() {
           </div>
         </div>
       </nav>
-      <body>
-        <div className="bg-gradient-to-r from-blue-200 via-teal-400 to-green-500"></div>
-      </body>
     </div>
   );
 }
