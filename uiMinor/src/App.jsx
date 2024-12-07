@@ -1,10 +1,20 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MenuBar from './components/MenuBar';
-import Home from './pages/Home';
-import DiagnosisPage from './pages/DiagnosisPage';
-import HistoryPage from './pages/HistoryPage';
-import SignUpSignInPage from './pages/SignUpSignInPage';
-import ImageUploadPage from './pages/ImageUploadPage';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MenuBar from "./components/MenuBar";
+import Home from "./pages/Home";
+import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
+import DiagnosisPage from "./pages/DiagnosisPage";
+import HistoryPage from "./pages/HistoryPage";
+import SignUpSignInPage from "./pages/SignUpSignInPage";
+import ImageUploadPage from "./pages/ImageUploadPage";
+
+function NotFound() {
+  return (
+    <div>
+      <h1>404 Not Found</h1>
+    </div>
+  );
+}
 
 function App() {
   return (
@@ -12,10 +22,13 @@ function App() {
       <MenuBar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/DiagnosisPage" element={<DiagnosisPage />} />
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/SignUpSignInPage" element={<SignUpSignInPage />} />
         <Route path="/ImageUploadPage" element={<ImageUploadPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

@@ -1,24 +1,38 @@
-import { Route } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import SignIn from "../components/SignIn";
+import { checkTokenValidity } from "../utils/auth";
+import HomeContent from "../components/HomeContent";
 
 function Home() {
-  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-    return (
-      <div className="flex flex-col  text-center justify-center items-center gap-10 ">
-        <h1 className=" text-4xl font-bold mt-10">Welcome to Lung Care.AI</h1>
-        <p>Upload your X-ray Image here to get started</p>
-        <button onClick={()=>navigate("/ImageUploadPage")}
-        type="button" className=" mr-4 py-2 px-4
-      rounded-full border-0
-      text-md font-semibold
-      bg-blue-50 text-green-700
-      hover:bg-green-100">
-          <p className=" ">Upload Your Image</p>
-        </button>
-      </div>
-    );
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+
+    if (token && checkTokenValidity(token)) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
-  
-  export default Home;
-  
+
+  if (!isAuthenticated) {
+    return <SignIn />;
+  }
+
+  return (
+    <div>
+      <HomeContent />
+    </div>
+  );
+}
+
+export default Home;
+
