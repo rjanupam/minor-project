@@ -34,7 +34,7 @@ export const classifyImage = async (req, res) => {
     });
     newImage.save();
 
-    res.json({ data: result.data, filename: req.file.filename });
+    res.json({ data: result.data, imageId: newImage._id });
   } catch (error) {
     console.error("Error processing image:", error);
     res.status(500).json({ message: "An error occurred", error });

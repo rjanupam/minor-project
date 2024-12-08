@@ -6,16 +6,23 @@ export const add = async (req, res) => {
   try {
     const { authorId, patientId, title, description, imageId } = req.body;
 
+    if (!authorId || !patientId || !title || !description || !imageId) {
+      return res.status(400).json({ error: "All fields are required" });
+    } else if (authorId !== req.user.id) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+
     const image = await Image.findById(imageId);
     if (!image) {
       return res.status(404).json({ error: "Image not found" });
     }
+
     const report = new Report({
       author: authorId,
       patient: patientId,
       title,
       description,
-      imageId,
+      imageId: image._id,
     });
     await report.save();
 
