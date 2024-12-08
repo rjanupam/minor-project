@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const ReportSchema = new mongoose.Schema({
   author: {
@@ -28,8 +28,9 @@ const ReportSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  imageUrl: {
-    type: String,
+  imageId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Image",
   },
 });
 
@@ -38,4 +39,4 @@ ReportSchema.pre("save", function (next) {
   next();
 });
 
-module.exports = mongoose.model("Report", ReportSchema);
+export default mongoose.model("Report", ReportSchema);

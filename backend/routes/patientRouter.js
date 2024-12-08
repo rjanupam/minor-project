@@ -1,9 +1,9 @@
-const express = require("express");
-const authenticateToken = require("../middlewares/authWare");
-const { patientView } = require("../controllers/patientController");
+import express from "express";
+import authenticateToken from "../middlewares/authWare.js";
+import { patientView } from "../controllers/patientController.js";
 
 const router = express.Router();
 
 router.get("/:patient", authenticateToken, patientView);
 
-module.exports = router;
+export default router;
