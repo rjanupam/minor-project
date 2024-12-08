@@ -3,7 +3,10 @@ import fs from "fs";
 import path from "path";
 import Image from "../models/Image.js";
 
-const upload = multer({ dest: "uploads/" });
+const upload = multer({
+  dest: "uploads/",
+  limits: { fileSize: 5 * 1024 * 1024 },
+});
 
 const loadGradioClient = async () => {
   return import("@gradio/client");
@@ -25,8 +28,13 @@ export const classifyImage = async (req, res) => {
       image: new Blob([fileBlob]),
     });
 
-    fs.unlinkSync(filePath);
-    res.json({ data: result.data });
+    const newImage = new Image({
+      filename: req.file.filename,
+      result: result.data[0],
+    });
+    newImage.save();
+
+    res.json({ data: result.data, filename: req.file.filename });
   } catch (error) {
     console.error("Error processing image:", error);
     res.status(500).json({ message: "An error occurred", error });

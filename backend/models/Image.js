@@ -5,12 +5,8 @@ const imageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  filePath: {
-    type: String,
-    required: true,
-  },
   result: {
-    type: String,
+    type: Object,
     required: false,
   },
   uploadedAt: {
