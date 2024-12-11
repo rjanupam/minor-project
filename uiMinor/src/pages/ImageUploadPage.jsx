@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { checkTokenValidity } from "../utils/auth";
 import { useNavigate } from "react-router-dom";
+import CreateReport from "./createReport";
 
 function ImageUploadPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -8,6 +9,7 @@ function ImageUploadPage() {
   const [file, setFile] = useState(null);
   const [response, setResponse] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [submitLoading, setSubmitLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,6 +55,8 @@ function ImageUploadPage() {
       return;
     }
 
+    setSubmitLoading(true);
+
     const formData = new FormData();
     formData.append("image", file);
 
@@ -69,10 +73,21 @@ function ImageUploadPage() {
       const result = await response.json();
       setResponse(result); // Set the classification result to state
       alert("Image uploaded and classified successfully!");
+      setSubmitLoading(false);
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred while uploading the image.");
+      setSubmitLoading(false);
     }
+  };
+
+  const handleCreateReport = () => {
+    navigate("/create_report", {
+      state: {
+        image: file,
+        results: response,
+      },
+    });
   };
 
   return (
@@ -110,13 +125,20 @@ function ImageUploadPage() {
           onClick={handleSubmit}
           className="p-2 justify-center mr-4 py-2 px-4 rounded-full border-0 text-md font-semibold bg-blue-50 text-green-700 hover:bg-green-100"
         >
-          Submit Image
+          {submitLoading ? "submitting..." : "Submit Image"}{" "}
         </button>
       </div>
       {response && (
         <div className="text-center mt-4">
           <h2 className="font-bold">Classification Results:</h2>
           <pre>{JSON.stringify(response, null, 2)}</pre>
+          <button
+            type="button"
+            onClick={handleCreateReport}
+            className="p-2 justify-center mr-4 py-2 px-4 rounded-full border-0 text-md font-semibold bg-blue-50 text-green-700 hover:bg-green-100"
+          >
+            Create Report
+          </button>
         </div>
       )}
     </div>
