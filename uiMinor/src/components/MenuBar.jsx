@@ -68,8 +68,7 @@ export default function MenuBar() {
               </button>
               {dropdownOpen && (
                 <div className="
-                absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-green-400 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none
-                text-black hover:text-black rounded-md text-sm font-medium cursor-pointer">
+                absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-green-400 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-nonetext-black hover:text-black text-sm font-medium cursor-pointer">
 
                   <div className="py-1">
                     <a
