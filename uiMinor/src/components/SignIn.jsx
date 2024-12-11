@@ -86,13 +86,17 @@ function SignIn() {
       text-md font-semibold
       bg-blue-100 text-green-700
       hover:bg-green-100"
+            disabled={loading}
           >
-            Sign In
+            {loading ? "Signing in..." : "Sign In"}{" "}
           </button>
         </form>
       </div>
       <p className="mt-10 text-center text-sm/6 text-gray-500">
-        Don't have an account? <Link to="/signup">Sign Up</Link>
+        Don't have an account?{" "}
+        <Link to={`/signup?last_page=${encodeURIComponent(lastPage)}`}>
+          Sign Up
+        </Link>
       </p>
     </div>
   );
