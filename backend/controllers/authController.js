@@ -1,8 +1,8 @@
-const User = require("../models/User");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+import User from "../models/User.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-exports.signup = async (req, res) => {
+export const signup = async (req, res) => {
   try {
     const { name, username, email, password } = req.body;
     if (!name || !username || !email || !password) {
@@ -32,12 +32,12 @@ exports.signup = async (req, res) => {
       .status(201)
       .json({ message: "User created successfully", success: true });
   } catch (err) {
-    console.error("singup failed", err);
+    console.error("Signup failed", err);
     res.status(500).json({ message: "Something went wrong" });
   }
 };
 
-exports.signin = async (req, res) => {
+export const signin = async (req, res) => {
   const { username, email, password } = req.body;
   try {
     let user;
@@ -65,7 +65,7 @@ exports.signin = async (req, res) => {
 
     res.json({ message: "Login successful", token, user: user_data });
   } catch (err) {
-    console.error("signin failed", err);
-    res.status(500).json({ message: "Something went wrong:", err });
+    console.error("Signin failed", err);
+    res.status(500).json({ message: "Something went wrong", err });
   }
 };

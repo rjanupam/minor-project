@@ -5,8 +5,10 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import DiagnosisPage from "./pages/DiagnosisPage";
 import HistoryPage from "./pages/HistoryPage";
-import SignUpSignInPage from "./pages/SignUpSignInPage";
 import ImageUploadPage from "./pages/ImageUploadPage";
+import CreateReport from "./pages/createReport";
+import SearchPatient from "./components/searchPatient";
+import CreatePatient from "./components/createPatient";
 
 function NotFound() {
   return (
@@ -26,8 +28,10 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/DiagnosisPage" element={<DiagnosisPage />} />
         <Route path="/history" element={<HistoryPage />} />
-        <Route path="/SignUpSignInPage" element={<SignUpSignInPage />} />
         <Route path="/ImageUploadPage" element={<ImageUploadPage />} />
+        <Route path="/create_report" element={<CreateReport />} />
+        <Route path="/search_patient" element={<SearchPatient />} />
+        <Route path="/create_patient" element={<CreatePatient />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

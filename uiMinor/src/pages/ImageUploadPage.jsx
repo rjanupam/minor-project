@@ -1,10 +1,34 @@
-import { useState } from "react";
-import { Client } from "@gradio/client";
+import { useState, useEffect } from "react";
+import { checkTokenValidity } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
 
 function ImageUploadPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [file, setFile] = useState(null);
   const [response, setResponse] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+
+    if (token && checkTokenValidity(token)) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    navigate("/signin?last_page=/ImageUploadPage");
+  }
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -14,13 +38,13 @@ function ImageUploadPage() {
     e.preventDefault();
     const droppedFile = e.dataTransfer.files[0];
     setFile(droppedFile);
-    setImagePreview(URL.createObjectURL(droppedFile)); 
+    setImagePreview(URL.createObjectURL(droppedFile));
   };
 
   const handleFileSelect = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
-    setImagePreview(URL.createObjectURL(selectedFile)); 
+    setImagePreview(URL.createObjectURL(selectedFile));
   };
 
   const handleSubmit = async () => {
@@ -29,16 +53,21 @@ function ImageUploadPage() {
       return;
     }
 
-    // Convert the file to a Blob
-    const imageBlob = file instanceof Blob ? file : new Blob([file]);
+    const formData = new FormData();
+    formData.append("image", file);
 
     try {
-      const client = await Client.connect("http://127.0.0.1:7860/");
-      const result = await client.predict("/predict", {
-        image: imageBlob, // 
+      const response = await fetch("http://localhost:3000/api/classify", {
+        method: "POST",
+        body: formData,
       });
 
-      setResponse(result.data); // Set the classification result to state
+      if (!response.ok) {
+        throw new Error("Failed to upload image");
+      }
+
+      const result = await response.json();
+      setResponse(result); // Set the classification result to state
       alert("Image uploaded and classified successfully!");
     } catch (error) {
       console.error("Error:", error);

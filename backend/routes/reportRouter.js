@@ -1,6 +1,10 @@
-const express = require("express");
-const authWare = require("../middlewares/authWare");
-const { add, getByAuthor, getByPatient } = require("../controllers/reports");
+import express from "express";
+import authWare from "../middlewares/authWare.js";
+import {
+  add,
+  getByAuthor,
+  getByPatient,
+} from "../controllers/reportController.js";
 
 const router = express.Router();
 
@@ -8,4 +12,4 @@ router.post("/add", authWare, add);
 router.get("/get_by_author", authWare, getByAuthor);
 router.get("/get_by_patient", authWare, getByPatient);
 
-module.exports = router;
+export default router;
