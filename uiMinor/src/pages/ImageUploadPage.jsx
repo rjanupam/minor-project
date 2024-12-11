@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import SignIn from "../components/SignIn";
 import { checkTokenValidity } from "../utils/auth";
+import { useNavigate } from "react-router-dom";
 
 function ImageUploadPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -8,6 +8,7 @@ function ImageUploadPage() {
   const [file, setFile] = useState(null);
   const [response, setResponse] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
@@ -26,7 +27,7 @@ function ImageUploadPage() {
   }
 
   if (!isAuthenticated) {
-    return <SignIn />;
+    navigate("/signin?last_page=/ImageUploadPage");
   }
 
   const handleDragOver = (e) => {
