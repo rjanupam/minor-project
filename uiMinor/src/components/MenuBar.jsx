@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { checkTokenValidity } from "../utils/auth";
 
 export default function MenuBar() {
@@ -7,6 +7,7 @@ export default function MenuBar() {
   const [loading, setLoading] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
@@ -18,7 +19,7 @@ export default function MenuBar() {
     }
 
     setLoading(false);
-  }, []);
+  }, [location]);
 
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
