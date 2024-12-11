@@ -5,7 +5,6 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import DiagnosisPage from "./pages/DiagnosisPage";
 import HistoryPage from "./pages/HistoryPage";
-import SignUpSignInPage from "./pages/SignUpSignInPage";
 import ImageUploadPage from "./pages/ImageUploadPage";
 
 function NotFound() {
@@ -26,7 +25,6 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/DiagnosisPage" element={<DiagnosisPage />} />
         <Route path="/history" element={<HistoryPage />} />
-        <Route path="/SignUpSignInPage" element={<SignUpSignInPage />} />
         <Route path="/ImageUploadPage" element={<ImageUploadPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

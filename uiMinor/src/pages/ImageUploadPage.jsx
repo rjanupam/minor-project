@@ -1,9 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import SignIn from "../components/SignIn";
+import { checkTokenValidity } from "../utils/auth";
 
 function ImageUploadPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [file, setFile] = useState(null);
   const [response, setResponse] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+
+    if (token && checkTokenValidity(token)) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return <SignIn />;
+  }
 
   const handleDragOver = (e) => {
     e.preventDefault();
