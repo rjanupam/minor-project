@@ -44,7 +44,7 @@ function SignIn() {
         <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
           Sign In
         </h2>
-        {error && <div style={{ color: "red" }}>{error}</div>}
+        {error && <div className="text-red-500 mt-2">{error}</div>}
       </div>
       <div className="flex max-w-md mx-auto mt-6 flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <form className="space-y-6" onSubmit={handleSignIn}>
@@ -81,7 +81,7 @@ function SignIn() {
           <button
             type="submit"
             className="flex w-full justify-center rounded-3xl text-sm/6 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600
-            p-2
+            p-2 transform hover:scale-103 transition-transform duration-300
           mr-4 py-2 px-4 border-0
       text-md font-semibold
       bg-blue-100 text-green-700
@@ -92,10 +92,10 @@ function SignIn() {
           </button>
         </form>
       </div>
-      <p className="mt-10 text-center text-sm/6 text-gray-500">
-        Don't have an account?{" "}
+      <p className="mt-10 text-center text-sm/6 text-gray-600">
+        {" "}
         <Link to={`/signup?last_page=${encodeURIComponent(lastPage)}`}>
-          Sign Up
+        Don't have an account? Sign Up
         </Link>
       </p>
     </div>
