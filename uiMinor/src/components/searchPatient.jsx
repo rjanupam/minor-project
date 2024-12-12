@@ -52,7 +52,7 @@ const SearchPatient = ({ onSelectPatient }) => {
             Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
             "Content-Type": "application/json",
           },
-        },
+        }
       );
 
       if (!response.ok) {
@@ -97,94 +97,79 @@ const SearchPatient = ({ onSelectPatient }) => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">Patient Search</h2>
+    <div className="max-w-3xl mx-auto mt-8 px-4 sm:px-6 lg:px-8">
+      <h1 className="text-center text-2xl/9 font-bold tracking-tight text-gray-900 mb-8">
+        Search Patient
+      </h1>
+      {error && <p className="text-red-500 text-center text-sm mb-4">{error}</p>}
+      <form className="space-y-6">
+        {[
+          { name: "username", type: "text", placeholder: "Username" },
+          { name: "name", type: "text", placeholder: "Name" },
+          { name: "email", type: "text", placeholder: "Email" },
+          { name: "minAge", type: "number", placeholder: "Min Age" },
+          { name: "maxAge", type: "number", placeholder: "Max Age" },
+        ].map((field) => (
+          <div key={field.name} className="space-y-2">
+            <label className="block text-sm/6 font-medium text-gray-900">
+              {field.placeholder}
+            </label>
+            <input
+              type={field.type}
+              name={field.name}
+              placeholder={field.placeholder}
+              value={searchParams[field.name]}
+              onChange={handleInputChange}
+              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
+            />
+          </div>
+        ))}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <input
-          type="text"
-          placeholder="Username"
-          name="username"
-          value={searchParams.username}
-          onChange={handleInputChange}
-          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="text"
-          placeholder="Name"
-          name="name"
-          value={searchParams.name}
-          onChange={handleInputChange}
-          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="text"
-          placeholder="Email"
-          name="email"
-          value={searchParams.email}
-          onChange={handleInputChange}
-          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <select
-          value={searchParams.bloodGroup}
-          onChange={(e) =>
-            setSearchParams((prev) => ({
-              ...prev,
-              bloodGroup: e.target.value,
-            }))
-          }
-          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="">Select Blood Group</option>
-          {bloodGroups.map((group) => (
-            <option key={group} value={group}>
-              {group}
-            </option>
-          ))}
-        </select>
-        <input
-          type="number"
-          placeholder="Min Age"
-          name="minAge"
-          value={searchParams.minAge}
-          onChange={handleInputChange}
-          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="number"
-          placeholder="Max Age"
-          name="maxAge"
-          value={searchParams.maxAge}
-          onChange={handleInputChange}
-          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-
-      <div className="flex space-x-4 mb-6">
-        <button
-          onClick={() => handleSearch()}
-          disabled={isLoading}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isLoading ? "Searching..." : "Search"}
-        </button>
-        <button
-          onClick={handleReset}
-          className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
-        >
-          Reset
-        </button>
-      </div>
-
-      {error && (
-        <div className="text-red-500 mb-4 bg-red-50 p-3 rounded-md">
-          {error}
+        <div className="space-y-2">
+          <label className="block text-sm/6 font-medium text-gray-900">
+            Blood Group
+          </label>
+          <select
+            name="bloodGroup"
+            value={searchParams.bloodGroup}
+            onChange={handleInputChange}
+            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
+          >
+            <option value="">Select Blood Group</option>
+            {bloodGroups.map((group) => (
+              <option key={group} value={group}>
+                {group}
+              </option>
+            ))}
+          </select>
         </div>
-      )}
+
+        <div className="flex justify-center space-x-4">
+          <button
+            type="button"
+            onClick={() => handleSearch()}
+            disabled={isLoading}
+            className={`flex w-1/2 justify-center rounded-3xl text-sm/6 shadow-sm py-2 px-4 transition-transform duration-300 ${
+              isLoading
+                ? "bg-gray-300 text-gray-700 cursor-not-allowed"
+                : "bg-blue-100 text-green-700 hover:bg-green-100 hover:scale-103"
+            }`}
+          >
+            {isLoading ? "Searching..." : "Search"}
+          </button>
+          <button
+            type="button"
+            onClick={handleReset}
+            className="flex w-1/2 justify-center rounded-3xl text-sm/6 shadow-sm py-2 px-4 bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-103 transition-transform duration-300"
+          >
+            Reset
+          </button>
+        </div>
+      </form>
 
       {patients.length > 0 && (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse bg-white">
+        <div className="mt-8 overflow-x-auto">
+          <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-100">
                 <th className="border p-3 text-left">Username</th>
@@ -192,7 +177,6 @@ const SearchPatient = ({ onSelectPatient }) => {
                 <th className="border p-3 text-left">Email</th>
                 <th className="border p-3 text-left">Age</th>
                 <th className="border p-3 text-left">Blood Group</th>
-                <th className="border p-3 text-left">Phone</th>
               </tr>
             </thead>
             <tbody>
@@ -207,12 +191,15 @@ const SearchPatient = ({ onSelectPatient }) => {
                   <td className="border p-3">{patient.email}</td>
                   <td className="border p-3">{patient.age}</td>
                   <td className="border p-3">{patient.bloodGroup || "N/A"}</td>
-                  <td className="border p-3">{patient.phone}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+      )}
+
+      {patients.length === 0 && !isLoading && (
+        <p className="text-center text-gray-600 mt-8">No patients found</p>
       )}
     </div>
   );

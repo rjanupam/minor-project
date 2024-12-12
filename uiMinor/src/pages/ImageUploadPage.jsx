@@ -1,36 +1,12 @@
-import { useState, useEffect } from "react";
-import { checkTokenValidity } from "../utils/auth";
-import { useNavigate } from "react-router-dom";
-import CreateReport from "./createReport";
+import { useState, useContext } from "react";
+import { DataContext } from "../components/DataContext";
+import { useNavigate } from "react-router-dom"; 
 
 function ImageUploadPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [file, setFile] = useState(null);
-  const [response, setResponse] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [submitLoading, setSubmitLoading] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem("jwtToken");
-
-    if (token && checkTokenValidity(token)) {
-      setIsAuthenticated(true);
-    } else {
-      setIsAuthenticated(false);
-    }
-
-    setLoading(false);
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!isAuthenticated) {
-    navigate("/signin?last_page=/ImageUploadPage");
-  }
+  const { response, setResponse } = useContext(DataContext);
+  const navigate = useNavigate(); 
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -71,7 +47,7 @@ function ImageUploadPage() {
       }
 
       const result = await response.json();
-      setResponse(result); // Set the classification result to state
+      setResponse(result.data); // Set the classification result to state
       alert("Image uploaded and classified successfully!");
       setSubmitLoading(false);
     } catch (error) {
@@ -81,23 +57,22 @@ function ImageUploadPage() {
     }
   };
 
-  const handleCreateReport = () => {
-    navigate("/create_report", {
-      state: {
-        image: file,
-        results: response,
-      },
-    });
+  const handleViewDiagnosis = () => {
+    if (!response) {
+      alert("No report available. Please upload an image first.");
+      return;
+    }
+    navigate("/DiagnosisPage"); 
   };
 
   return (
     <div className="pt-16">
       <h1 className="text-3xl font-bold text-center mt-10">Image Upload</h1>
-      <div>
+      <div className="flex flex-col items-center mt-4 p-2">
         <div
           onDragOver={handleDragOver}
           onDrop={handleDrop}
-          className="box-content mx-auto h-60 w-1/5 content-center p-4 m-5 min-w-30 border-dashed border-4 border-green-500 text-center rounded-lg bg-gray-100"
+          className="flex justify-center items-center h-60 w-full  max-w-md border-4 border-dashed border-green-500 text-center rounded-lg bg-gray-100 mb-4"
         >
           {imagePreview ? (
             <img
@@ -109,38 +84,32 @@ function ImageUploadPage() {
             "Drag and drop an image here"
           )}
         </div>
-      </div>
-      <div className="mt-4 text-center">
-        <input
-          type="file"
-          onChange={handleFileSelect}
-          accept="image/*"
-          className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-md file:font-semibold file:bg-blue-50 file:text-green-700 hover:file:bg-green-100"
-        />
-      </div>
-      {file && <p className="text-center mt-4">Selected File: {file.name}</p>}
-      <div className="text-center mt-4">
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="p-2 justify-center mr-4 py-2 px-4 rounded-full border-0 text-md font-semibold bg-blue-50 text-green-700 hover:bg-green-100"
-        >
-          {submitLoading ? "submitting..." : "Submit Image"}{" "}
-        </button>
-      </div>
-      {response && (
-        <div className="text-center mt-4">
-          <h2 className="font-bold">Classification Results:</h2>
-          <pre>{JSON.stringify(response, null, 2)}</pre>
+        <div>
+          <input
+            type="file"
+            onChange={handleFileSelect}
+            accept="image/*"
+            className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-md file:font-semibold file:bg-blue-50 file:text-green-700 hover:file:bg-green-100"
+          />
+        </div>
+        {file && <p className="text-center mt-4 text-sm">Selected File: {file.name}</p>}
+        <div className="flex flex-col sm:flex-row justify-center mt-4 gap-4">
           <button
             type="button"
-            onClick={handleCreateReport}
-            className="p-2 justify-center mr-4 py-2 px-4 rounded-full border-0 text-md font-semibold bg-blue-50 text-green-700 hover:bg-green-100"
+            onClick={handleSubmit}
+            className="p-2 py-2 px-4 rounded-full border-0 text-md font-semibold bg-blue-50 text-green-700 hover:bg-green-100 hover:scale-105 transition-transform duration-300"
           >
-            Create Report
+            Submit Image
+          </button>
+          <button
+            type="button"
+            onClick={handleViewDiagnosis}
+            className="p-2 py-2 px-4 rounded-full border-0 text-md font-semibold bg-blue-50 text-green-700 hover:bg-green-100 hover:scale-105 transition-transform duration-300"
+          >
+            View Diagnosis/Report
           </button>
         </div>
-      )}
+      </div>
     </div>
   );
 }
