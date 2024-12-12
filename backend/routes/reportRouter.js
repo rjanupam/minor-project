@@ -1,15 +1,10 @@
 import express from "express";
 import authWare from "../middlewares/authWare.js";
-import {
-  add,
-  getByAuthor,
-  getByPatient,
-} from "../controllers/reportController.js";
+import { add, search } from "../controllers/reportController.js";
 
 const router = express.Router();
 
-router.post("/add", authWare, add);
-router.get("/get_by_author", authWare, getByAuthor);
-router.get("/get_by_patient", authWare, getByPatient);
+router.post("/new", authWare, add);
+router.get("/search", authWare, search);
 
 export default router;

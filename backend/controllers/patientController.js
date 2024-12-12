@@ -38,7 +38,6 @@ export const add = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log("hgvs")
     // Handle validation errors
     if (error.name === "ValidationError") {
       const errors = Object.values(error.errors).map((err) => err.message);
@@ -70,8 +69,6 @@ export const search = async (req, res) => {
       page = 1,
       limit = 10,
     } = req.query;
-
-      console.log(req.query);
 
     const query = {};
 

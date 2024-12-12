@@ -58,6 +58,7 @@ export const signin = async (req, res) => {
     });
 
     const user_data = {
+      id: user._id,
       name: user.name,
       username: user.username,
       email: user.email,

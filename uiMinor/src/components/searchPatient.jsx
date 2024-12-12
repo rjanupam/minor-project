@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SearchPatient = () => {
+const SearchPatient = ({ onSelectPatient }) => {
   const [searchParams, setSearchParams] = useState({
     username: "",
     name: "",
@@ -73,6 +73,10 @@ const SearchPatient = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handlePatientSelect = (patient) => {
+    onSelectPatient(patient);
   };
 
   const handleReset = () => {
@@ -193,7 +197,11 @@ const SearchPatient = () => {
             </thead>
             <tbody>
               {patients.map((patient) => (
-                <tr key={patient._id} className="hover:bg-gray-50">
+                <tr
+                  key={patient._id}
+                  className="hover:bg-gray-50"
+                  onClick={() => handlePatientSelect(patient)}
+                >
                   <td className="border p-3">{patient.username}</td>
                   <td className="border p-3">{patient.name}</td>
                   <td className="border p-3">{patient.email}</td>
@@ -204,30 +212,6 @@ const SearchPatient = () => {
               ))}
             </tbody>
           </table>
-
-          <div className="flex justify-between items-center mt-4 p-3 bg-gray-50 rounded-md">
-            <span className="text-gray-700">
-              Total Patients: {pagination.total}
-            </span>
-            <div className="space-x-2">
-              <button
-                onClick={() => handleSearch(pagination.page - 1)}
-                disabled={pagination.page === 1}
-                className="px-3 py-1 border rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Previous
-              </button>
-              <button
-                onClick={() => handleSearch(pagination.page + 1)}
-                disabled={
-                  pagination.page * pagination.limit >= pagination.total
-                }
-                className="px-3 py-1 border rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
-            </div>
-          </div>
         </div>
       )}
     </div>
