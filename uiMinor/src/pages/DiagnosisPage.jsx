@@ -32,8 +32,8 @@ function DiagnosisPage() {
               </tr>
             </thead>
             <tbody>
-              {Object.entries(response[Object.keys(response)[0]])
-                .slice(0, 5)
+              {Object.entries(response[Object.keys(response)[0]]) //slice(0,5) for colon results too (all results)
+                .slice(2, 5)
                 .map(([key, value], index) => (
                   <tr
                     key={index}

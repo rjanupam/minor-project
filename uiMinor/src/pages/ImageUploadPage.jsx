@@ -1,20 +1,36 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { DataContext } from "../components/DataContext";
 import { useNavigate } from "react-router-dom";
 
 function ImageUploadPage() {
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [ submitLoading, setSubmitLoading ] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const { response, setResponse } = useContext(DataContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (response) {
+      navigate("/DiagnosisPage");
+    }
+  }, [response, navigate]);
 
   const handleDragOver = (e) => {
     e.preventDefault();
   };
 
+  const handleDragEnter = () => {
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
   const handleDrop = (e) => {
     e.preventDefault();
+    setIsDragging(false);
     const droppedFile = e.dataTransfer.files[0];
     setFile(droppedFile);
     setImagePreview(URL.createObjectURL(droppedFile));
@@ -48,32 +64,28 @@ function ImageUploadPage() {
       }
 
       const result = await response.json();
-      setResponse(result.data); // Set the classification result to state
+      setResponse(result.data);
       alert("Image uploaded and classified successfully!");
-      setSubmitLoading(false);
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred while uploading the image.");
+    } finally {
       setSubmitLoading(false);
     }
-  };
-
-  const handleViewDiagnosis = () => {
-    if (!response) {
-      alert("No report available. Please upload an image first.");
-      return;
-    }
-    navigate("/DiagnosisPage");
   };
 
   return (
     <div className="pt-16">
+      <div className="text-center"><b className="text-lg font-bold text-center">Note:</b><p className="text-sm">Only Histopathological scan of Lung tissue can be diagonsed.</p></div>
       <h1 className="text-3xl font-bold text-center mt-10">Image Upload</h1>
       <div className="flex flex-col items-center mt-4 p-2">
         <div
           onDragOver={handleDragOver}
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          className="flex justify-center items-center h-60 w-full  max-w-md border-4 border-dashed border-green-500 text-center rounded-lg bg-gray-100 mb-4"
+          className={`flex justify-center items-center h-60 w-full max-w-md border-4 ${isDragging ? "border-green-500 bg-green-200" : "border-dashed border-green-500 bg-gray-100"
+            } text-center rounded-lg mb-4 mx-4 sm:mx-0`}
         >
           {imagePreview ? (
             <img
@@ -103,13 +115,6 @@ function ImageUploadPage() {
             className="p-2 py-2 px-4 rounded-full border-0 text-md font-semibold bg-blue-50 text-green-700 hover:bg-green-100 hover:scale-105 transition-transform duration-300"
           >
             {submitLoading ? "Submitting..." : "Submit Image"}
-          </button>
-          <button
-            type="button"
-            onClick={handleViewDiagnosis}
-            className="p-2 py-2 px-4 rounded-full border-0 text-md font-semibold bg-blue-50 text-green-700 hover:bg-green-100 hover:scale-105 transition-transform duration-300"
-          >
-            View Diagnosis/Report
           </button>
         </div>
       </div>
