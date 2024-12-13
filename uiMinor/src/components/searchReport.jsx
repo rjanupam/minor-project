@@ -42,7 +42,7 @@ const SearchReport = () => {
       queryParams.append("limit", pagination.limit);
 
       const response = await fetch(
-        `http://localhost:3000/api/report/search?${queryParams.toString()}`,
+        `/api/report/search?${queryParams.toString()}`,
         {
           method: "GET",
           headers: {

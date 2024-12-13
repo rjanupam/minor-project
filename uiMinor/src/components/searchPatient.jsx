@@ -45,7 +45,7 @@ const SearchPatient = ({ onSelectPatient }) => {
       queryParams.append("limit", pagination.limit);
 
       const response = await fetch(
-        `http://localhost:3000/api/patient/search?${queryParams.toString()}`,
+        `/api/patient/search?${queryParams.toString()}`,
         {
           method: "GET",
           headers: {

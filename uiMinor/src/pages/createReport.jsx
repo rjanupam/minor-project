@@ -42,7 +42,7 @@ const CreateReport = () => {
         imageId: image ? results.imageId : null,
       };
 
-      const response = await fetch("http://localhost:3000/api/report/new", {
+      const response = await fetch("/api/report/new", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           "Content-Type": "application/json",

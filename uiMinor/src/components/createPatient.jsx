@@ -34,7 +34,7 @@ const CreatePatient = ({ onPatientCreated }) => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/patient/new", {
+      const response = await fetch("/api/patient/new", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,

@@ -54,7 +54,7 @@ function ImageUploadPage() {
     formData.append("image", file);
 
     try {
-      const response = await fetch("http://localhost:3000/api/classify", {
+      const response = await fetch("/api/classify", {
         method: "POST",
         body: formData,
       });
