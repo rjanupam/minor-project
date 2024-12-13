@@ -1,202 +1,101 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const SearchReport = () => {
-  const [searchParams, setSearchParams] = useState({
-    authorId: "",
-    patientId: "",
-    title: "",
-    startDate: "",
-    endDate: "",
-  });
-
+  const [query, setQuery] = useState("");
   const [reports, setReports] = useState([]);
-  const [pagination, setPagination] = useState({
-    total: 0,
-    page: 1,
-    limit: 10,
-  });
-
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSearchParams((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const limit = 10; // Number of reports per page
 
-  const handleSearch = async (page = 1) => {
-    setIsLoading(true);
+  const fetchReports = async () => {
+    setLoading(true);
     setError(null);
-
     try {
-      const queryParams = new URLSearchParams();
-
-      Object.entries(searchParams).forEach(([key, value]) => {
-        if (value) queryParams.append(key, value);
-      });
-
-      queryParams.append("page", page);
-      queryParams.append("limit", pagination.limit);
-
-      const response = await fetch(
-        `/api/report/search?${queryParams.toString()}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
-            "Content-Type": "application/json",
-          },
-        },
-      );
+      const response = await fetch(`/api/reports?query=${query}&page=${page}&limit=${limit}`);
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        throw new Error("Failed to fetch reports");
       }
-
       const data = await response.json();
-
       setReports(data.reports);
-      setPagination({
-        total: data.total,
-        page: data.page,
-        limit: data.limit,
-      });
+      setTotalPages(data.totalPages);
     } catch (err) {
-      setError(err.message || "An error occurred while searching");
-      setReports([]);
+      setError(err.message || "An error occurred");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  const handleReset = () => {
-    setSearchParams({
-      authorId: "",
-      patientId: "",
-      title: "",
-      startDate: "",
-      endDate: "",
-    });
-    setReports([]);
-    setPagination({
-      total: 0,
-      page: 1,
-      limit: 10,
-    });
+  useEffect(() => {
+    fetchReports();
+  }, [page]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setPage(1); 
+    fetchReports();
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">Report Search</h2>
+    <div className="pt-16 px-4 sm:px-6 md:px-8 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-bold text-center mt-10">Search Reports</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <form onSubmit={handleSearch} className="flex flex-col md:flex-row md:gap-4 mb-6 w-full max-w-3xl mx-auto">
         <input
           type="text"
-          placeholder="Author ID"
-          name="authorId"
-          value={searchParams.authorId}
-          onChange={handleInputChange}
-          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Search by report title or patient"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="w-full md:w-2/3 p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 placeholder:text-gray-400"
         />
-        <input
-          type="text"
-          placeholder="Patient ID"
-          name="patientId"
-          value={searchParams.patientId}
-          onChange={handleInputChange}
-          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          type="text"
-          placeholder="Title"
-          name="title"
-          value={searchParams.title}
-          onChange={handleInputChange}
-          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <div className="flex items-center space-x-2">
-          <label className="text-gray-700">Start Date:</label>
-          <input
-            type="date"
-            name="startDate"
-            value={searchParams.startDate}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div className="flex items-center space-x-2">
-          <label className="text-gray-700">End Date:</label>
-          <input
-            type="date"
-            name="endDate"
-            value={searchParams.endDate}
-            onChange={handleInputChange}
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-      </div>
-
-      <div className="flex space-x-4 mb-6">
         <button
-          onClick={() => handleSearch()}
-          disabled={isLoading}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+          type="submit"
+          className="flex  justify-center rounded-3xl text-sm/6 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600
+            p-2 transform hover:scale-103 transition-transform duration-300"
         >
-          {isLoading ? "Searching..." : "Search"}
+          Search
         </button>
-        <button
-          onClick={handleReset}
-          className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
-        >
-          Reset
-        </button>
-      </div>
+      </form>
 
       {error && (
-        <div className="text-red-500 mb-4 bg-red-50 p-3 rounded-md">
+        <div className="text-red-500 mb-4">
           {error}
         </div>
       )}
 
-      {reports.length > 0 && (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse bg-white">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border p-3 text-left">Title</th>
-                <th className="border p-3 text-left">Author</th>
-                <th className="border p-3 text-left">Patient</th>
-                <th className="border p-3 text-left">Created At</th>
-                <th className="border p-3 text-left">Description</th>
-                <th className="border p-3 text-left">Image</th>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="overflow-x-auto w-full mx-auto">
+          <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden border-collapse">
+            <thead className="bg-gradient-to-r from-green-400 via-teal-400 to-green-500 text-white">
+              <tr>
+                <th className="px-4 py-2 sm:px-6 sm:py-4 text-left font-semibold text-sm sm:text-base">Title</th>
+                <th className="px-4 py-2 sm:px-6 sm:py-4 text-left font-semibold text-sm sm:text-base">Author</th>
+                <th className="px-4 py-2 sm:px-6 sm:py-4 text-left font-semibold text-sm sm:text-base">Patient</th>
+                <th className="px-4 py-2 sm:px-6 sm:py-4 text-left font-semibold text-sm sm:text-base">Created At</th>
+                <th className="px-4 py-2 sm:px-6 sm:py-4 text-left font-semibold text-sm sm:text-base">Description</th>
+                <th className="px-4 py-2 sm:px-6 sm:py-4 text-left font-semibold text-sm sm:text-base">Image</th>
               </tr>
             </thead>
             <tbody>
               {reports.map((report) => (
-                <tr key={report._id} className="hover:bg-gray-50">
-                  <td className="border p-3">{report.title}</td>
-                  <td className="border p-3">{report.author?.name || "N/A"}</td>
-                  <td className="border p-3">
-                    {report.patient?.name || "N/A"}
-                  </td>
-                  <td className="border p-3">
-                    {new Date(report.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="border p-3">
-                    {report.description.length > 50
-                      ? `${report.description.substring(0, 50)}...`
-                      : report.description}
-                  </td>
-                  <td className="border p-3">
-                    {report.imageId ? (
+                <tr key={report._id} className="transition-all duration-200 ease-in-out hover:bg-gray-200">
+                  <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-300 text-gray-800 font-medium text-sm sm:text-base">{report.title}</td>
+                  <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-300 text-gray-800 text-sm sm:text-base">{report.author?.name || "N/A"}</td>
+                  <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-300 text-gray-800 text-sm sm:text-base">{report.patient?.name || "N/A"}</td>
+                  <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-300 text-gray-800 text-sm sm:text-base">{new Date(report.createdAt).toLocaleDateString()}</td>
+                  <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-300 text-gray-800 text-sm sm:text-base">{report.description || "N/A"}</td>
+                  <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-300 text-gray-800 text-sm sm:text-base">
+                    {report.image ? (
                       <a
-                        href={report.imageId.url}
+                        href={report.image}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-500 hover:underline"
+                        className="text-green-500 hover:underline"
                       >
                         View Image
                       </a>
@@ -208,32 +107,31 @@ const SearchReport = () => {
               ))}
             </tbody>
           </table>
-
-          <div className="flex justify-between items-center mt-4 p-3 bg-gray-50 rounded-md">
-            <span className="text-gray-700">
-              Total Reports: {pagination.total}
-            </span>
-            <div className="space-x-2">
-              <button
-                onClick={() => handleSearch(pagination.page - 1)}
-                disabled={pagination.page === 1}
-                className="px-3 py-1 border rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Previous
-              </button>
-              <button
-                onClick={() => handleSearch(pagination.page + 1)}
-                disabled={
-                  pagination.page * pagination.limit >= pagination.total
-                }
-                className="px-3 py-1 border rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
-            </div>
-          </div>
         </div>
       )}
+
+      {/* Pagination */}
+      <div className="flex justify-between items-center mt-6 w-full max-w-3xl mx-auto">
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+          className="py-2 px-4 rounded-md bg-green-300 hover:bg-green-400 disabled:opacity-50"
+        >
+          Previous
+        </button>
+
+        <p className="text-sm text-gray-600">
+          Page {page} of {totalPages}
+        </p>
+
+        <button
+          onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={page === totalPages}
+          className="py-2 px-4 rounded-md bg-green-300 hover:bg-green-400 disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
