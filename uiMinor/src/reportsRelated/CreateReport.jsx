@@ -35,15 +35,15 @@ const CreateReport = () => {
 
     setErrors(formErrors);
 
-    if (Object.keys(formErrors).length > 0) return;
+    if (Object.keys(formErrors).length > 0) return; // Stop if there are errors
 
     try {
       const reportData = {
-        authorId: localStorage.getItem("userId"),  // Assuming userId is stored in localStorage
+        authorId: localStorage.getItem("userId"),
         patientEmail: selectedPatient.email,
         title: reportTitle,
         description: reportDescription,
-        imageId: image ? results?.imageId : null, // Send imageId only if image exists
+        imageId: image ? results.imageId : null,
       };
 
       const response = await fetch("/api/report/new", {
@@ -56,9 +56,7 @@ const CreateReport = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error from server:", errorData);
-        throw new Error(errorData.message || "Failed to submit report.");
+        throw new Error("Failed to submit report.");
       }
 
       alert("Report submitted successfully!");
@@ -70,7 +68,7 @@ const CreateReport = () => {
 
   return (
     <div className="max-w-3xl mx-auto mt-12 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-center text-2xl font-bold tracking-tight text-gray-900 mb-8">
+      <h1 className="text-center text-2xl/9 font-bold tracking-tight text-gray-900 mb-8">
         Create Report
       </h1>
 
@@ -114,31 +112,31 @@ const CreateReport = () => {
 
               <form onSubmit={handleSubmitReport} className="space-y-6 mt-6">
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-900">Report Title</label>
+                  <label className="block text-sm/6 font-medium text-gray-900">Report Title</label>
                   <input
                     type="text"
                     placeholder="Enter report title"
                     value={reportTitle}
                     onChange={(e) => setReportTitle(e.target.value)}
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm"
+                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
                   />
                   {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
                 </div>
 
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-900">Report Description</label>
+                  <label className="block text-sm/6 font-medium text-gray-900">Report Description</label>
                   <textarea
                     placeholder="Enter report description"
                     value={reportDescription}
                     onChange={(e) => setReportDescription(e.target.value)}
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm h-36"
+                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6 h-36"
                   ></textarea>
                   {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
                 </div>
 
                 <button
                   type="submit"
-                  className="flex w-full justify-center rounded-3xl text-sm shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 py-2 px-4 bg-blue-100 text-green-700 hover:bg-green-100 hover:scale-103 transition-transform duration-300"
+                  className="flex w-full justify-center rounded-3xl text-sm/6 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 py-2 px-4 bg-blue-100 text-green-700 hover:bg-green-100 hover:scale-103 transition-transform duration-300"
                 >
                   Submit Report
                 </button>

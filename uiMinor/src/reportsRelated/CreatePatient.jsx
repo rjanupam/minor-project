@@ -1,156 +1,122 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
-import CreatePatient from "./CreatePatient";
-import SearchPatient from "./SearchPatient";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const CreateReport = () => {
-  const [selectedPatient, setSelectedPatient] = useState(null);
-  const [isCreatingPatient, setIsCreatingPatient] = useState(false);
-  const [reportTitle, setReportTitle] = useState("");
-  const [reportDescription, setReportDescription] = useState("");
-  const [errors, setErrors] = useState({ title: "", description: "" });
-
+const CreatePatient = ({ onPatientCreated }) => {
+  const [formData, setFormData] = useState({
+    username: "",
+    name: "",
+    age: "",
+    email: "",
+    bloodGroup: "",
+    address: "",
+    phone: "",
+  });
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
   const location = useLocation();
-  const { image, results } = location.state || {};
 
-  const handleSelectPatient = (patient) => {
-    setSelectedPatient(patient);
+  const queryParams = new URLSearchParams(location.search);
+  const lastPage = queryParams.get("last_page") || "/";
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleCreatePatient = () => {
-    setIsCreatingPatient(true);
-  };
-
-  const handlePatientCreated = (patient) => {
-    setSelectedPatient(patient);
-    setIsCreatingPatient(false);
-  };
-
-  const handleSubmitReport = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    let formErrors = {};
-    if (!reportTitle) formErrors.title = "Report title is required.";
-    if (!reportDescription) formErrors.description = "Report description is required.";
-
-    setErrors(formErrors);
-
-    if (Object.keys(formErrors).length > 0) return;
+    setError("");
+    setIsSubmitting(true);
 
     try {
-      const reportData = {
-        authorId: localStorage.getItem("userId"),
-        patientEmail: selectedPatient.email,
-        title: reportTitle,
-        description: reportDescription,
-        imageId: image ? results?.imageId : null,
-      };
-
-      const response = await fetch("/api/report/new", {
+      const response = await fetch("/api/patient/new", {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           "Content-Type": "application/json",
         },
-        method: "POST",
-        body: JSON.stringify(reportData),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error from server:", errorData);
-        throw new Error(errorData.message || "Failed to submit report.");
+        throw new Error(errorData.error || "Failed to create patient");
       }
 
-      alert("Report submitted successfully!");
-    } catch (error) {
-      console.error("Error submitting report:", error);
-      alert("An error occurred while submitting the report.");
+      setMessage("User created successfully");
+
+      setFormData({
+        username: "",
+        name: "",
+        age: "",
+        email: "",
+        bloodGroup: "",
+        address: "",
+        phone: "",
+      });
+
+      if (onPatientCreated) {
+        const data = await response.json();
+        onPatientCreated(data.patient);
+      } else if (lastPage !== "/") {
+        navigate(lastPage);
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-12 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-center text-2xl font-bold tracking-tight text-gray-900 mb-8">
-        Create Report
+    <div className="max-w-3xl mx-auto mt-8 px-4 sm:px-6 lg:px-8">
+      <h1 className="text-center text-2xl/9 font-bold tracking-tight text-gray-900 mb-8">
+        Create New Patient
       </h1>
-
-      {!isCreatingPatient ? (
-        <>
-          {!selectedPatient ? (
-            <div className="space-y-6">
-              <SearchPatient onSelectPatient={handleSelectPatient} />
-              <button
-                onClick={handleCreatePatient}
-                className="flex w-full justify-center rounded-3xl text-lg font-semibold bg-blue-100 text-green-700 hover:bg-green-100 transition-all duration-300 shadow-lg transform hover:scale-105 py-2 px-4"
-              >
-                New Patient
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-8">
-              <h2 className="text-xl font-semibold text-gray-800">Selected Patient</h2>
-              <p className="text-lg text-gray-700">{selectedPatient.name}</p>
-              <p className="text-lg text-gray-700">{selectedPatient.email}</p>
-
-              {image && (
-                <div className="mt-6">
-                  <h3 className="text-lg font-medium text-gray-800">Uploaded Image</h3>
-                  <img
-                    src={URL.createObjectURL(image)}
-                    alt="Uploaded"
-                    className="object-contain w-full max-w-lg mx-auto rounded-lg shadow-xl mt-4"
-                  />
-                </div>
-              )}
-
-              {results && (
-                <div className="mt-6">
-                  <h3 className="text-lg font-medium text-gray-800">Classification Results</h3>
-                  <pre className="bg-gray-100 p-4 rounded-lg shadow-md text-sm text-gray-700 mt-4">
-                    {JSON.stringify(results.data[0], null, 2)}
-                  </pre>
-                </div>
-              )}
-
-              <form onSubmit={handleSubmitReport} className="space-y-6 mt-6">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-900">Report Title</label>
-                  <input
-                    type="text"
-                    placeholder="Enter report title"
-                    value={reportTitle}
-                    onChange={(e) => setReportTitle(e.target.value)}
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm"
-                  />
-                  {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-900">Report Description</label>
-                  <textarea
-                    placeholder="Enter report description"
-                    value={reportDescription}
-                    onChange={(e) => setReportDescription(e.target.value)}
-                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm h-36"
-                  ></textarea>
-                  {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
-                </div>
-
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-3xl text-sm shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 py-2 px-4 bg-blue-100 text-green-700 hover:bg-green-100 hover:scale-103 transition-transform duration-300"
-                >
-                  Submit Report
-                </button>
-              </form>
-            </div>
-          )}
-        </>
-      ) : (
-        <CreatePatient onPatientCreated={handlePatientCreated} />
-      )}
+      {error && <p className="text-red-500 text-center text-sm mb-4">{error}</p>}
+      {message && <p className="text-green-500 text-center text-sm mb-4">{message}</p>}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {[
+          { name: "username", type: "text", placeholder: "Username", required: true },
+          { name: "name", type: "text", placeholder: "Name", required: true },
+          { name: "age", type: "number", placeholder: "Age", required: true },
+          { name: "email", type: "email", placeholder: "Email", required: true },
+          { name: "bloodGroup", type: "text", placeholder: "Blood Group", required: false },
+          { name: "address", type: "text", placeholder: "Address", required: false },
+          { name: "phone", type: "text", placeholder: "Phone", required: true },
+        ].map((field) => (
+          <div key={field.name} className="space-y-2">
+            <label className="block text-sm/6 font-medium text-gray-900">{field.placeholder}</label>
+            <input
+              type={field.type}
+              name={field.name}
+              placeholder={field.placeholder}
+              value={formData[field.name]}
+              onChange={handleChange}
+              required={field.required}
+              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-green-600 sm:text-sm/6"
+            />
+          </div>
+        ))}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className={`flex w-full justify-center rounded-3xl text-sm/6 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 py-2 px-4 ${
+            isSubmitting
+              ? "bg-gray-300 text-gray-700 cursor-not-allowed"
+              : "bg-blue-100 text-green-700 hover:bg-green-100 hover:scale-103 transition-transform duration-300"
+          }`}
+        >
+          {isSubmitting ? "Creating..." : "Create Patient"}
+        </button>
+      </form>
     </div>
   );
 };
 
-export default CreateReport;
+export default CreatePatient;
