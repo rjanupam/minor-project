@@ -1,12 +1,13 @@
 import { useState, useContext } from "react";
 import { DataContext } from "../components/DataContext";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 function ImageUploadPage() {
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [ submitLoading, setSubmitLoading ] = useState(false);
   const { response, setResponse } = useContext(DataContext);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -62,7 +63,7 @@ function ImageUploadPage() {
       alert("No report available. Please upload an image first.");
       return;
     }
-    navigate("/DiagnosisPage"); 
+    navigate("/DiagnosisPage");
   };
 
   return (
@@ -92,14 +93,16 @@ function ImageUploadPage() {
             className="file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-md file:font-semibold file:bg-blue-50 file:text-green-700 hover:file:bg-green-100"
           />
         </div>
-        {file && <p className="text-center mt-4 text-sm">Selected File: {file.name}</p>}
+        {file && (
+          <p className="text-center mt-4 text-sm">Selected File: {file.name}</p>
+        )}
         <div className="flex flex-col sm:flex-row justify-center mt-4 gap-4">
           <button
             type="button"
             onClick={handleSubmit}
             className="p-2 py-2 px-4 rounded-full border-0 text-md font-semibold bg-blue-50 text-green-700 hover:bg-green-100 hover:scale-105 transition-transform duration-300"
           >
-            Submit Image
+            {submitLoading ? "Submitting..." : "Submit Image"}
           </button>
           <button
             type="button"
