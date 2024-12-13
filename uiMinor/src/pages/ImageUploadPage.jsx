@@ -76,7 +76,7 @@ function ImageUploadPage() {
 
   return (
     <div className="pt-16">
-      <div className="text-center"><b className="text-lg font-bold text-center">Note:</b><p className="text-sm">Only Histopathological scan of Lung tissue can be diagonsed.</p></div>
+      <div className="text-center"><b className="text-lg font-bold text-center">Note:</b><p className="text-sm">Only Histopathological scan of Lung tissue can be used for diagnosis.</p></div>
       <h1 className="text-3xl font-bold text-center mt-10">Image Upload</h1>
       <div className="flex flex-col items-center mt-4 p-2">
         <div
