@@ -3,15 +3,17 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
+import AboutUsPage from "./pages/AboutUsPage";
+
 import DiagnosisPage from "./pages/DiagnosisPage";
+import ImageUploadPage from "./pages/ImageUploadPage";
 
 import { DataProvider } from "./components/DataContext";
-import SearchReport from "./components/searchReport";
-import AboutUsPage from "./pages/AboutUsPage";
-import ImageUploadPage from "./pages/ImageUploadPage";
-import CreateReport from "./pages/CreateReport";
-import SearchPatient from "./components/searchPatient";
-import CreatePatient from "./components/createPatient";
+
+import SearchReport from "./reportsRelated/SearchReport";
+import CreateReport from "./reportsRelated/CreateReport";
+import SearchPatient from "./reportsRelated/SearchPatient";
+import CreatePatient from "./reportsRelated/CreatePatient";
 
 function NotFound() {
   return (
