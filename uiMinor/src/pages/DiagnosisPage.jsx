@@ -41,10 +41,11 @@ function DiagnosisPage() {
                       index % 2 === 0 ? "bg-gray-100" : "bg-white"
                     } hover:bg-gray-200`}>
                     <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-300 text-gray-800 font-medium text-sm sm:text-base">
-                      {key.replace(/_/g, " ")}
+                    {key.replace(/lung_aca/g, "Lung Adenocarcinoma").replace(/lung_n/g, "Lung Benign").replace(/lung_scc/g, "Lung Squamous Cell Carcinoma")}
                     </td>
                     <td className="px-4 py-2 sm:px-6 sm:py-4 border-b border-gray-300 text-gray-800 text-sm sm:text-base">
                       {`${(value * 100).toFixed(2)}%`}
+                      
                     </td>
                   </tr>
                 ))}
