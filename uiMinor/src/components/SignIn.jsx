@@ -31,6 +31,7 @@ function SignIn() {
     if (response.ok) {
       const { token, user } = await response.json();
       localStorage.setItem("jwtToken", token); // Store the JWT token
+      localStorage.setItem("username", user.username);
       navigate(lastPage);
     } else {
       const { message } = await response.json();

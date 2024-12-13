@@ -79,7 +79,7 @@ export default function MenuBar() {
                     onClick={handleLogout}
                     className={`text-white ${active === "/logout" ? "text-black bg-gray-200" : ""} hover:bg-gray-200 hover:text-black rounded-md px-3 py-2 text-base font-medium cursor-pointer`}
                   >
-                    Logout
+                  Logout
                   </button>
                 ) : (
                   <a
