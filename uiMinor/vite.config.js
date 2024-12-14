@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-          target: "http://localhost:3000",
+          target: "https://minor-project-vqff.onrender.com/",
         changeOrigin: true,
       },
     },
