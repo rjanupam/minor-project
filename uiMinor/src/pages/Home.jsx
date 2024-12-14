@@ -39,6 +39,7 @@ function Home() {
         >
           Upload Your Image
         </button>
+        
       </div>
     </div>
   );

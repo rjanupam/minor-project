@@ -2,37 +2,60 @@ import React from "react";
 
 function AboutUsPage() {
   return (
-    <div className="  bg-gray-50 py-10 px-6">
-      <div className="max-w-4xl mx-auto text-center">
-        <h1 className="text-4xl font-bold text-gray-800 mb-6">About Us</h1>
-        
-        <p className="text-lg text-gray-600 mb-8">Team LungCare.ai</p>
-        
-        <h2 className="text-2xl font-semibold text-gray-700 mb-6">Our Team</h2>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <img className="w-24 h-24 rounded-full mx-auto mb-4" src="/team-member1.jpg" alt="Team Member 1" />
-            <h3 className="text-xl font-semibold text-gray-800">Anupam Jain</h3>
-            <p className="text-gray-600">Everthing</p>
+    <div className="bg-gradient-to-br from-green-50 to-green-100 py-10 px-4 h-screen">
+      <div className="max-w-7xl mx-auto text-center">
+        <h2 className="text-xl sm:text-3xl font-semibold text-gray-800 mb-1 sm:m-24 ">Meet Our Team</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-8">
+          <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+            <div className="flex justify-center gap-6 mb-6">
+              <a href="https://twitter.com/rjanupam" target="_blank" rel="noopener noreferrer">
+                <img className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg shadow-md" src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" />
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                <img className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg shadow-md" src="https://cdn-icons-png.flaticon.com/512/733/733561.png" alt="LinkedIn" />
+              </a>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-semibold text-gray-800">Anupam Jain</h3>
+            <p className="text-gray-600">Backend Developer & Documentation</p>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <img className="w-24 h-24 rounded-full mx-auto mb-4" src="/team-member2.jpg" alt="Team Member 2" />
-            <h3 className="text-xl font-semibold text-gray-800">Atharv Mahajan</h3>
-            <p className="text-gray-600">Position</p>
+          <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+            <div className="flex justify-center gap-6 mb-6">
+              <a href="http://github.com/atharvmahajan32" target="_blank" rel="noopener noreferrer">
+                <img className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg shadow-md" src="https://cdn-icons-png.flaticon.com/512/733/733553.png" alt="GitHub" />
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                <img className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg shadow-md" src="https://cdn-icons-png.flaticon.com/512/733/733561.png" alt="LinkedIn" />
+              </a>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-semibold text-gray-800">Atharv Mahajan</h3>
+            <p className="text-gray-600">Frontend Developer</p>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <img className="w-24 h-24 rounded-full mx-auto mb-4" src="/team-member3.jpg" alt="Team Member 3" />
-            <h3 className="text-xl font-semibold text-gray-800">Ashish Dubey</h3>
-            <p className="text-gray-600">Position</p>
+          <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+            <div className="flex justify-center gap-6 mb-6">
+              <a href="https://github.com/axhxshdby" target="_blank" rel="noopener noreferrer">
+                <img className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg shadow-md" src="https://cdn-icons-png.flaticon.com/512/733/733553.png" alt="GitHub" />
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                <img className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg shadow-md" src="https://cdn-icons-png.flaticon.com/512/733/733561.png" alt="LinkedIn" />
+              </a>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-semibold text-gray-800">Ashish Dubey</h3>
+            <p className="text-gray-600">Frontend Developer & Documentation </p>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <img className="w-24 h-24 rounded-full mx-auto mb-4" src="/team-member4.jpg" alt="Team Member 4" />
-            <h3 className="text-xl font-semibold text-gray-800">Ayush Sharma</h3>
-            <p className="text-gray-600">:/ </p>
+          <div className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+            <div className="flex justify-center gap-6 mb-6">
+              <a href="https://twitter.com/iushrma" target="_blank" rel="noopener noreferrer">
+                <img className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg shadow-md" src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter" />
+              </a>
+              <a href="https://linkedin.com/in/theayusharma" target="_blank" rel="noopener noreferrer">
+                <img className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg shadow-md" src="https://cdn-icons-png.flaticon.com/512/733/733561.png" alt="LinkedIn" />
+              </a>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-semibold text-gray-800">Ayush Sharma</h3>
+            <p className="text-gray-600">Frontend Developer</p>
           </div>
         </div>
       </div>

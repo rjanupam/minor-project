@@ -136,10 +136,11 @@ const CreateReport = () => {
 
                 <button
                   type="submit"
-                  className="flex w-full justify-center rounded-3xl text-sm/6 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 py-2 px-4 bg-blue-100 text-green-700 hover:bg-green-100 hover:scale-103 transition-transform duration-300"
+                  className="py-2 px-4 rounded-full border-0 text-md font-semibold hover:scale-105 transition-transform duration-300 bg-blue-50 text-green-700 hover:bg-green-100"
                 >
                   Submit Report
                 </button>
+                
               </form>
             </div>
           )}

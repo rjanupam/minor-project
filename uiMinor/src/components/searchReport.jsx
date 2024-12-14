@@ -31,6 +31,14 @@ const SearchReport = () => {
     setIsLoading(true);
     setError(null);
 
+    // Validation: Ensure at least one search parameter is filled
+    const hasSearchParams = Object.values(searchParams).some((value) => value.trim() !== "");
+    if (!hasSearchParams) {
+      setError("Please fill in at least one search field.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const queryParams = new URLSearchParams();
 
@@ -58,6 +66,12 @@ const SearchReport = () => {
 
       const data = await response.json();
 
+      if (!data.reports || data.reports.length === 0) {
+        setError("No matching reports found.");
+        setReports([]);
+        return;
+      }
+
       setReports(data.reports);
       setPagination({
         total: data.total,
@@ -65,7 +79,7 @@ const SearchReport = () => {
         limit: data.limit,
       });
     } catch (err) {
-      setError(err.message || "An error occurred while searching");
+      setError(err.message || "An error occurred while searching.");
       setReports([]);
     } finally {
       setIsLoading(false);
@@ -86,6 +100,7 @@ const SearchReport = () => {
       page: 1,
       limit: 10,
     });
+    setError(null);
   };
 
   return (
@@ -99,7 +114,7 @@ const SearchReport = () => {
           name="authorId"
           value={searchParams.authorId}
           onChange={handleInputChange}
-          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         <input
           type="text"
@@ -107,7 +122,7 @@ const SearchReport = () => {
           name="patientId"
           value={searchParams.patientId}
           onChange={handleInputChange}
-          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         <input
           type="text"
@@ -115,7 +130,7 @@ const SearchReport = () => {
           name="title"
           value={searchParams.title}
           onChange={handleInputChange}
-          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         <div className="flex items-center space-x-2">
           <label className="text-gray-700">Start Date:</label>
@@ -124,7 +139,7 @@ const SearchReport = () => {
             name="startDate"
             value={searchParams.startDate}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
         <div className="flex items-center space-x-2">
@@ -134,7 +149,7 @@ const SearchReport = () => {
             name="endDate"
             value={searchParams.endDate}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
       </div>
@@ -143,13 +158,13 @@ const SearchReport = () => {
         <button
           onClick={() => handleSearch()}
           disabled={isLoading}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="py-2 px-4 rounded-full border-0 text-md font-semibold hover:scale-105 transition-transform duration-300 bg-green-50 text-green-700 hover:bg-green-100"
         >
           {isLoading ? "Searching..." : "Search"}
         </button>
         <button
           onClick={handleReset}
-          className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100"
+          className="py-2 px-4 rounded-full border-0 text-md font-semibold hover:scale-105 transition-transform duration-300 bg-green-50 text-green-700 hover:bg-green-100"
         >
           Reset
         </button>
@@ -179,12 +194,8 @@ const SearchReport = () => {
                 <tr key={report._id} className="hover:bg-gray-50">
                   <td className="border p-3">{report.title}</td>
                   <td className="border p-3">{report.author?.name || "N/A"}</td>
-                  <td className="border p-3">
-                    {report.patient?.name || "N/A"}
-                  </td>
-                  <td className="border p-3">
-                    {new Date(report.createdAt).toLocaleDateString()}
-                  </td>
+                  <td className="border p-3">{report.patient?.name || "N/A"}</td>
+                  <td className="border p-3">{new Date(report.createdAt).toLocaleDateString()}</td>
                   <td className="border p-3">
                     {report.description.length > 50
                       ? `${report.description.substring(0, 50)}...`
@@ -196,7 +207,7 @@ const SearchReport = () => {
                         href={report.imageId.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-500 hover:underline"
+                        className="text-green-500 hover:underline"
                       >
                         View Image
                       </a>
@@ -210,23 +221,19 @@ const SearchReport = () => {
           </table>
 
           <div className="flex justify-between items-center mt-4 p-3 bg-gray-50 rounded-md">
-            <span className="text-gray-700">
-              Total Reports: {pagination.total}
-            </span>
+            <span className="text-gray-700">Total Reports: {pagination.total}</span>
             <div className="space-x-2">
               <button
                 onClick={() => handleSearch(pagination.page - 1)}
                 disabled={pagination.page === 1}
-                className="px-3 py-1 border rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="py-2 px-4 rounded-full border-0 text-md font-semibold hover:scale-105 transition-transform duration-300 bg-blue-50 text-green-700 hover:bg-green-100"
               >
                 Previous
               </button>
               <button
                 onClick={() => handleSearch(pagination.page + 1)}
-                disabled={
-                  pagination.page * pagination.limit >= pagination.total
-                }
-                className="px-3 py-1 border rounded-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={pagination.page * pagination.limit >= pagination.total}
+                className="py-2 px-4 rounded-full border-0 text-md font-semibold hover:scale-105 transition-transform duration-300 bg-blue-50 text-green-700 hover:bg-green-100"
               >
                 Next
               </button>
