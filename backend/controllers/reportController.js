@@ -6,21 +6,22 @@ import User from "../models/User.js";
 
 export const add = async (req, res) => {
   try {
-    const { authorId, patientEmail, title, description, imageId } = req.body;
+    const { authorId, patientEmail, title, description } = req.body;
 
-    if (!authorId || !patientEmail || !title || !description || !imageId) {
+    if (!authorId || !patientEmail || !title || !description) { // imageId removed
       return res.status(400).json({ error: "All fields are required" });
     } else if (authorId !== req.user.id) {
       return res.status(403).json({ error: "Unauthorized" });
     }
-
+/*
     if (imageId) {
       const image = await Image.findById(imageId);
       if (!image) {
         return res.status(404).json({ error: "Image not found" });
       }
     }
-
+*/
+        const imageId = null;
     const patient = await Patient.findOne({ email: patientEmail });
     if (!patient) {
       return res.status(404).json({ error: "Patient not found" });
