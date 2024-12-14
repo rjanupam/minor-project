@@ -7,7 +7,7 @@ import authRouter from "./routes/authRouter.js";
 import classifyRouter from "./routes/classifyRouter.js";
 import patientRouter from "./routes/patientRouter.js";
 import reportRouter from "./routes/reportRouter.js";
-//import userRouter from "./routes/userRouter.js";
+import userRouter from "./routes/userRouter.js";
 
 dotenv.config();
 
@@ -28,7 +28,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/classify", classifyRouter);
 app.use("/api/patient", patientRouter);
 app.use("/api/report", reportRouter);
-//app.use("/api/user", userRouter);
+app.use("/api/user", userRouter);
 
 app.get("/", (req, res) => res.send("you shouldnt be here"));
 

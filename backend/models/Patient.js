@@ -19,6 +19,11 @@ const PatientSchema = new mongoose.Schema({
     required: true,
     match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   },
+  phone: {
+    type: String,
+    required: true,
+    match: /^\d{10}$/,
+  },
   bloodGroup: {
     type: String,
     required: false,
@@ -26,11 +31,6 @@ const PatientSchema = new mongoose.Schema({
   address: {
     type: String,
     required: false,
-  },
-  phone: {
-    type: String,
-    required: true,
-    match: /^\d{10}$/,
   },
 });
 

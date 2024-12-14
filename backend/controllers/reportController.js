@@ -8,7 +8,7 @@ export const add = async (req, res) => {
   try {
     const { authorId, patientEmail, title, description, imageId } = req.body;
 
-    if (!authorId || !patientEmail || !title || !description || !imageId) {
+    if (!authorId || !patientEmail || !title || !description) {
       return res.status(400).json({ error: "All fields are required" });
     } else if (authorId !== req.user.id) {
       return res.status(403).json({ error: "Unauthorized" });
@@ -36,7 +36,7 @@ export const add = async (req, res) => {
     await report.save();
 
     // Send email to patient
-    /*    if (patient) {
+/*    if (patient) {
       const patientEmail = patient.email;
       const emailBody = `
         <p>Dear ${patient.name},</p>
@@ -59,7 +59,7 @@ export const add = async (req, res) => {
 export const search = async (req, res) => {
   try {
     const {
-      author_username,
+      author_userId = req.user.id,
       patient_username,
       title,
       startDate,
@@ -70,8 +70,8 @@ export const search = async (req, res) => {
 
     const searchQuery = {};
 
-    if (author_username) {
-      const author = await User.findOne({ username: author_username });
+    if (author_userId) {
+      const author = await User.findOne({ _id: author_userId });
       searchQuery.author = author ? author._id : null;
     }
 

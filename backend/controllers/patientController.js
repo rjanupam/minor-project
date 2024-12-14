@@ -18,9 +18,9 @@ export const add = async (req, res) => {
       name,
       age,
       email,
-      bloodGroup,
-      address,
       phone,
+      bloodGroup: bloodGroup || "",
+      address: address || "",
     });
     await patient.save();
 

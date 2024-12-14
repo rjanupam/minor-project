@@ -1,6 +1,6 @@
-const User = require("../models/User");
+import User from "../models/User.js";
 
-exports.userView = async (req, res) => {
+export const userView = async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
     if (!user) return res.status(404).json({ message: "User not found" });
