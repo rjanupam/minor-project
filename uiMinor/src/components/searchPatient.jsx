@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const SearchPatient = ({ onSelectPatient }) => {
   const [searchParams, setSearchParams] = useState({
@@ -45,7 +46,7 @@ const SearchPatient = ({ onSelectPatient }) => {
       queryParams.append("limit", pagination.limit);
 
       const response = await fetch(
-        `/api/patient/search?${queryParams.toString()}`,
+        `${API_BASE_URL}/api/patient/search?${queryParams.toString()}`,
         {
           method: "GET",
           headers: {

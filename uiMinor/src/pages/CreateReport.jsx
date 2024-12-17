@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import CreatePatient from "../components/createPatient";
 import SearchPatient from "../components/searchPatient";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 const CreateReport = () => {
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [isCreatingPatient, setIsCreatingPatient] = useState(false);
@@ -46,7 +48,7 @@ const CreateReport = () => {
         imageId: image ? results.imageId : null,
       };
 
-      const response = await fetch("/api/report/new", {
+      const response = await fetch(`${API_BASE_URL}/api/report/new`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
           "Content-Type": "application/json",

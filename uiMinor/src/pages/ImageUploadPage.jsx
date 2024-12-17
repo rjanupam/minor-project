@@ -2,6 +2,8 @@ import { useState, useContext, useEffect } from "react";
 import { DataContext } from "../components/DataContext";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function ImageUploadPage() {
   const [file, setFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -54,7 +56,7 @@ function ImageUploadPage() {
     formData.append("image", file);
 
     try {
-      const response = await fetch("/api/classify", {
+      const response = await fetch(`${API_BASE_URL}/api/classify`, {
         method: "POST",
         body: formData,
       });

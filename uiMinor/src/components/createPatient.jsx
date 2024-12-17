@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const CreatePatient = ({ onPatientCreated }) => {
   const [formData, setFormData] = useState({
@@ -34,7 +35,7 @@ const CreatePatient = ({ onPatientCreated }) => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/patient/new", {
+      const response = await fetch(`${API_BASE_URL}/api/patient/new`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,

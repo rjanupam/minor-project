@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const SearchReport = () => {
   const [searchParams, setSearchParams] = useState({
@@ -42,7 +43,7 @@ const SearchReport = () => {
       queryParams.append("limit", pagination.limit);
 
       const response = await fetch(
-        `http://localhost:3000/api/report/search?${queryParams.toString()}`,
+        `${API_BASE_URL}/api/report/search?${queryParams.toString()}`,
         {
           method: "GET",
           headers: {
