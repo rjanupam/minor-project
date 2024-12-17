@@ -7,12 +7,12 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     server: {
-      proxy: {
+      proxy: mode === "development" ? {
         "/api": {
           target: env.VITE_API_BASE_URL,
           changeOrigin: true,
         },
-      },
+      } : undefined,
     },
   };
 });
