@@ -44,15 +44,15 @@ export default function MenuBar() {
       <nav className="bg-gradient-to-r from-blue-200 via-teal-400 to-green-500">
         <div className="mx-auto px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
-            {/* Logo */}
             <div className="flex flex-1 items-center justify-center sm:justify-between">
               <div className="flex shrink-0 items-center">
-                <img
-                  onClick={() => navigate("/")}
-                  className="h-11 w-auto cursor-pointer"
-                  src="/fullLogo.png"
-                  alt="Logo"
-                />
+              <img
+  onClick={() => navigate("/")}
+  className="h-11 w-auto cursor-pointer"
+  src={process.env.PUBLIC_URL + "/fullLogo.png"}
+  alt="Logo"
+/>
+
               </div>
             </div>
             <div className="hidden sm:block">
